@@ -1,0 +1,11 @@
+{
+  "name": "@depender/core",
+  "version": "0.0.1",
+  "description": "A simple javascript realisation of Dependency Injection pattern",
+  "author": "Nagaitsev Sergei",
+  "private": false,
+  "license": "MIT License",
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  }
+}
