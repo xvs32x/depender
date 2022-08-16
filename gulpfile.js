@@ -12,11 +12,14 @@ function build(cb) {
 }
 
 async function copy() {
-    return src('./package/package.json').pipe(dest('./dist'));
+    return src([
+        './package/package.json',
+        '.npmrc',
+    ]).pipe(dest('./dist'));
 }
 
 function publish(cb) {
-    exec('cd dist && npm publish', function (err, stdout, stderr) {
+    exec('cd dist && npm publish --access public', function (err, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
         cb(err);
