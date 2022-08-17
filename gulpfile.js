@@ -13,13 +13,14 @@ function build(cb) {
 async function copy() {
     return src([
         './package/package.json',
-        '.npmrc',
+        // '.npmrc',
     ]).pipe(dest('./dist'));
 }
 
 function publish(cb) {
+    const { tag } = argv;
     exec(
-        `cd dist && npm version ${ argv.tag } --no-git-tag-version && npm publish --access public```,
+        `cd dist && npm version ${tag} --no-git-tag-version && npm publish --access public`,
         function (err, stdout, stderr) {
             console.log(stdout);
             console.log(stderr);

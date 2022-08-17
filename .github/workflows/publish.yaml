@@ -13,6 +13,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN  }}' > ${{ github.workspace }}/.npmrc
       - run: npm i
-      - run: npm run release --tag ${{ github.ref_name }}
+      - run: gulp --tag ${{ github.ref_name }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
