@@ -1,6 +1,6 @@
 {
   "name": "@depender/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple javascript realisation of Dependency Injection pattern",
   "author": "Nagaitsev Sergei",
   "private": false,
