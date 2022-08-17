@@ -19,7 +19,7 @@ async function copy() {
 }
 
 function publish(cb) {
-    exec('cd dist && npm publish --access public --tag beta', function (err, stdout, stderr) {
+    exec('cd dist && npm publish --access public', function (err, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
         cb(err);
