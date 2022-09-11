@@ -18,7 +18,7 @@ A simple javascript realisation of Dependency Injection pattern.
 	@injectable() // <-- Add injectable decorator
 	class DependencyTwo { ... }
 	
-    @injectable()  <-- Add injectable decorator
+    @injectable() //  <-- Add injectable decorator
 	class Application {  
 	    constructor(
             public dependencyOne: DependencyOne, // <-- instance will be created by Depender
