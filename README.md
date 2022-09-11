@@ -25,7 +25,7 @@ A simple javascript realisation of Dependency Injection pattern.
         ) {}
 
 	    callDependency() {
-            this.dependencyOne.print(); // <-- Call children instance created by Depender
+            this.dependencyOne.print(); // <-- Call chil instance created by Depender
 	    }
 	}
 	
