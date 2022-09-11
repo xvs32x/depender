@@ -41,6 +41,17 @@ describe('Main cases', () => {
                 expect(instance instanceof Example).toBe(true);
             });
 
+            test('should set props provided in arguments', () => {
+                @injectable()
+                class Example {
+                    constructor(public foo1: string, public foo2: string) {
+                    }
+                }
+                const instance = Container.get(Example, 'value 1', 'value 2');
+                expect(instance.foo1).toBe('value 1');
+                expect(instance.foo2).toBe('value 2');
+            });
+
         });
 
         describe('set', () => {
