@@ -26,5 +26,5 @@ A simple javascript realisation of Dependency Injection pattern.
 	    }
 	}
 	
-	const applicationInstance: Application = Container.get(Application);
+	const applicationInstance: Application = Container.inject({ class: Application });
 	applicationInstance.callDependency() // <-- Prints 123

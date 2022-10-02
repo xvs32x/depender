@@ -1,6 +1,6 @@
 import { injectable } from '../package/injectable';
 import { Container } from '../package/container';
-import { Injection } from '../package/injection';
+import { messages } from '../package/messages';
 
 describe('Main cases', () => {
 
@@ -8,80 +8,56 @@ describe('Main cases', () => {
 
         beforeEach(() => {
             Reflect.set(Container, 'instances', {});
-        })
-
-        describe('get', () => {
-
-            test('should call "set" method because constructor does not exist in #instances property', () => {
-                @injectable()
-                class Example {
-                    foo = '123';
-                }
-
-                Container.set = jest.fn().mockImplementation(Container.set);
-
-                const instance: Example = Container.get(Example);
-
-                expect(Container.set).toHaveBeenCalledWith(Example);
-                expect(instance instanceof Example).toBe(true);
-            });
-
-            test('should not call "set" method because constructor exists in #instances property', () => {
-                @injectable()
-                class Example {
-                    foo1 = '123'
-                }
-
-                Container.set(Example);
-                Container.set = jest.fn().mockImplementation(Container.set);
-
-                const instance: Example = Container.get(Example);
-
-                expect(Container.set).toHaveBeenCalledTimes(0);
-                expect(instance instanceof Example).toBe(true);
-            });
-
-            test('should set props provided in arguments', () => {
-                @injectable()
-                class Example {
-                    constructor(public foo1: string, public foo2: string) {
-                    }
-                }
-                const instance = Container.get(Example, 'value 1', 'value 2');
-                expect(instance.foo1).toBe('value 1');
-                expect(instance.foo2).toBe('value 2');
-            });
-
         });
 
-        describe('set', () => {
+        describe('inject', () => {
 
-            test('should overwrite existed constructor', () => {
-                @injectable()
-                class Example {
-                    foo() {
-                        return 12345;
-                    }
-                }
-                const initialInstance: Example = {
-                    foo() {
-                        return 123;
-                    }
-                }
-                Reflect.set(Container, 'instances', { [Example.name]: new Injection(initialInstance) });
+            it('should throw exception because injectable decorator is missed', () => {
+                class Example {}
 
-                // Rewrite initial instance with another realisation
-                Container.set(Example);
-                const instance = Container.get(Example);
-
-                expect(instance.foo()).toBe(12345);
+                expect(() => Container.inject({ class: Example })).toThrow(
+                    new Error(messages.missedInjection(Example.name))
+                );
             });
 
-        });
+            it('should create instance once because it is cashed by default', () => {
+                @injectable()
+                class Example {
+                    constructor(public isCached) {
+                    }
+                }
 
-        describe('Dependencies resolving', () => {
+                Container.inject({ class: Example, overrides: [true] })
 
-            test('should create instances of children dependencies', () => {
+                expect(Container.inject({ class: Example, overrides: [false] }).isCached).toBe(true);
+            });
+
+            it('should create instance twice because rewrite is true', () => {
+                @injectable()
+                class Example {
+                    constructor(public isCached) {
+                    }
+                }
+
+                Container.inject({ class: Example, overrides: [true] })
+
+                expect(Container.inject({ class: Example, rewrite: true, overrides: [false] }).isCached)
+                    .toBe(false);
+            });
+
+            it('should use passed instance if it is presented', () => {
+                @injectable()
+                class Example {
+                    constructor(public foo) {
+                    }
+                }
+
+                const instance = new Example(123);
+
+                expect(Container.inject({ class: Example, instance }).foo).toBe(123);
+            });
+
+            it('should create instances of children dependencies', () => {
                 @injectable()
                 class Child {
                     foo() {
@@ -97,7 +73,7 @@ describe('Main cases', () => {
                     }
                 }
 
-                const instance = Container.get(Parent);
+                const instance = Container.inject({ class: Parent });
 
                 expect(instance.foo()).toBe(12345);
             });
